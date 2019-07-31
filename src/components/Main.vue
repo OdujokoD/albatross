@@ -1,5 +1,7 @@
 <template>
   <div class="main">
+    <Navbar />
+    <img alt="Vue logo" src="../assets/logo.png">
     <h1>{{ msg }}</h1>
     <p>
       For a guide and recipes on how to configure / customize this project,<br>
@@ -31,8 +33,13 @@
 </template>
 
 <script>
+import Navbar from '@/components/Navbar.vue';
+
 export default {
   name: 'Main',
+  components: {
+    Navbar
+  },
   props: {
     msg: String
   }
@@ -41,6 +48,9 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  .main {
+    background-color: #d8e1e6;
+  }
 h3 {
   margin: 40px 0 0;
 }
