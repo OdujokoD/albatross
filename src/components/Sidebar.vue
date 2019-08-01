@@ -3,16 +3,20 @@
 
   </div>
 </template>
-<style scoped>
+<style lang="scss" scoped>
+  // variables
+  $dark-blue: #021f35;
+
   .sidebar {
-    background-color: #021f35;
+    background-color: $dark-blue;
     height: 100vh;
-    width: 16.2vw;
+    width: 16.667%;
     color:white;
     position: fixed; 
-    top: 0; 
-    left: 0;
+    // top: 0; 
+    // left: 0;
   }
+
 </style>
 <script>
 export default {

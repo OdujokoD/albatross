@@ -41,11 +41,11 @@ export default {
   
 }
 </script>
-<style scoped>
+<style lang="scss" scoped>
   .nav-bar {
-    margin-bottom: 20px;
-  }
-  nav {
-    width: 100%;
+    margin-bottom: 30px;
+    width: 83.333%;
+    position: fixed;
+    z-index: 20;
   }
 </style>

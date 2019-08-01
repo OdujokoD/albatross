@@ -4,7 +4,7 @@
       <div class="column is-2">
         <Sidebar />
       </div>
-      <div class="column is-10 content">
+      <div class="column content">
         <Main msg="Welcome to Your Vue.js App"/>
       </div>
     </div>
@@ -26,6 +26,6 @@ export default {
 </script>
 <style scoped>
   .content {
-    padding-left: 0.2rem;
+    padding-left: 0.5rem;
   }
 </style>
