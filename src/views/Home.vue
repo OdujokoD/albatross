@@ -5,22 +5,21 @@
         <Sidebar />
       </div>
       <div class="column content">
-        <Main msg="Welcome to Your Vue.js App"/>
+        <Supplier />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
-import Main from '@/components/Main.vue';
+import Supplier from '@/components/Supplier.vue';
 import Sidebar from '@/components/Sidebar.vue';
 
 export default {
   name: 'home',
   components: {
-    Main,
-    Sidebar
+    Sidebar,
+    Supplier
   },
 };
 </script>
