@@ -2,6 +2,12 @@
   <div class="supplier">
     <Navbar />
     <div class="is-main-content">
+      <div class="column top-actions">
+        <div class="is-pulled-right">
+          <a class="button is-info is-outlined">Add Supplier</a>
+          <a class="button is-info is-outlined">Bulk Upload Supplier</a>
+        </div>
+      </div>
       <div class="column is-12">
         <data-tables-server ref="multipleTable" :data="suppliers" :total="total" @query-change="fetchData" :pagination-props="pagination"
           :table-props="tableProps"  :layout="layout" @selection-change="handleSelectionChange">
@@ -9,8 +15,8 @@
           </el-table-column>
           <el-table-column label="Name" sortable prop="name">
             <template slot-scope="scope">
-              <span v-for="button in tableListner(scope.row)" :key= "scope.row.name" type="text" class="td_text"
-                @click="button.handler">
+              <span v-for="supplier in tableListner(scope.row)" :key= "supplier.name" type="text" class="td_text"
+                @click="supplier.handler">
                 {{ scope.row.name }}
               </span>
             </template>
@@ -70,6 +76,20 @@ export default {
     closeSupplierDetails() {
       this.showDetails = false
     },
+    fetchCustomer() {
+      let token = process.env.VUE_APP_AUTH_KEY;
+      let config = {
+          headers: {'Authorization': "bearer " + token}
+      };
+      let customerEmail = "cocoa@radiant.com";
+      this.$http.get('/customer/' + customerEmail , config)
+      .then((response) => {
+        console.log("Customer response: ", response)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+    },
     fetchData(query) {
       let token = process.env.VUE_APP_AUTH_KEY;
       let config = {
@@ -81,6 +101,9 @@ export default {
       .then((response) => {
         this.parseSupplierResponse(response.data.data)
         this.total = response.data.meta.total
+      })
+      .catch((error) => {
+        console.log(error)
       });
     },
     flattenObject(obj) {
@@ -109,7 +132,6 @@ export default {
     tableListner(row) {
       if (row.name !== null) {
         return [{
-          name: row.name,
           handler: _ => {
             this.showDetails = true;
             this.supplier = row;
@@ -122,13 +144,20 @@ export default {
       }
     },
 
+  },
+  mounted() {
+    this.fetchCustomer();
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
   // variables
   $light-grey: #f2f2f3;
+
+  .sc-table .pagination-wrap {
+    text-align: left;
+  }
 
   .supplier {
     
@@ -148,6 +177,13 @@ export default {
     // }
     .sc-table {
       margin-top: 2rem;
+      .pagination-wrap {
+        text-align: left !important;
+      }
+      .el-pagination {
+        float: left;
+        padding: 15px 0;
+      }
     }
     .hover_over:hover {
       border: 1px solid #5596e6 
@@ -159,7 +195,5 @@ export default {
       color: #021f35; 
       cursor: pointer;
     }
-
-
   }
 </style>

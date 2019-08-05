@@ -4,19 +4,37 @@
       <div class="modal-background"></div>
       <div class="modal-card">
         <header class="modal-card-head">
-          <p class="modal-card-title">Modal title</p>
+          <h5 class="modal-card-title">{{ supplier.name }}</h5>
           <button class="delete" aria-label="close" @click="closeModal"></button>
         </header>
         <section class="modal-card-body">
-          Lorem, ipsum dolor sit amet consectetur adipisicing elit. Deleniti omnis, quisquam officiis beatae eveniet praesentium laborum, nisi eos similique at officia minus itaque cumque maiores blanditiis. Cumque omnis quo dignissimos.
-          Facilis eaque maiores officia dicta excepturi tenetur iste officiis doloremque ad, aspernatur amet. Facilis, deleniti atque. Iusto saepe provident delectus libero maiores beatae mollitia incidunt, aliquam tenetur reiciendis! Est, vitae?
-          Excepturi, laboriosam saepe. Facilis rem voluptatem voluptate. Dicta dolores ullam dolor. Veritatis repellat optio accusantium inventore hic, sapiente eius odit odio corrupti. Neque est officiis veniam praesentium sapiente, eaque assumenda?
-          Deserunt optio numquam omnis culpa ea earum minima. Aspernatur earum, porro molestiae eveniet tenetur, optio nulla, a tempora voluptatibus laboriosam modi sit numquam illo architecto ab placeat molestias corrupti mollitia.
-          Tempora eos officia illo et, magni incidunt! Veritatis commodi in molestias! Animi nisi magnam ratione eaque quasi natus voluptatibus quia consequuntur, dolores voluptates dicta laudantium expedita delectus. Tempore, ea ex!
+          <div>
+            <span>Bank</span>
+            <span class="is-pulled-right">{{supplier.bank_name}}</span>
+          </div>
+          <div>
+            <span>Account Number</span>
+            <span class="is-pulled-right">{{supplier.account_number}}</span>
+          </div>
+          <div>
+            <span>Recipient Code</span>
+            <span class="is-pulled-right">{{supplier.recipient_code}}</span>
+          </div>
+          <div>
+            <span>Active</span>
+            <span class="is-pulled-right">{{supplier.active}}</span>
+          </div>
+          <div>
+            <span>Date added</span>
+            <span class="is-pulled-right">{{supplier.createdAt}}</span>
+          </div>
+          <div>
+            <span>Description</span>
+            <span class="is-pulled-right">{{supplier.description}}</span>
+          </div>
         </section>
         <footer class="modal-card-foot">
-          <button class="button is-success">Save changes</button>
-          <button class="button">Cancel</button>
+          <button class="button is-success">Edit Supplier</button>
         </footer>
       </div>
     </div>
@@ -28,13 +46,13 @@ export default {
   data() {
     return {
       // isActive: this.showDetails,
-      supplier: this.supplier
+      // supplier: this.supplier
     }
   },
   methods: {
     closeModal(event) {
       // event.preventDefault()
-      this.showDetails=false
+      // this.showDetails=false
       this.$emit("close");
     },
 
@@ -44,4 +62,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  // variables
+  $light-grey: rgba(156, 156, 156, 0.86);
+
+  .modal {
+    .modal-background {
+      background-color: $light-grey;
+    }
+  }
+  .modal-card { 
+    position: fixed; 
+    right: 0px; 
+    height: 100vh !important;
+    max-height: 100vh; 
+    width: 30vw; 
+    max-width: none; 
+    z-index: auto !important;
+
+    .modal-card-head, .modal-card-foot { 
+      border-radius: 0;
+      background-color: white;
+      border: none;
+
+      h5 {
+        margin-bottom: 0;
+      }
+    }
+  }
 </style>
