@@ -23,12 +23,18 @@
   </div>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 export default {
   data() {
     return {
-      balance: 0,
+      balance: this.$store.getters.getBalance,
     }
   },
+  // computed: {
+  //   ...mapGetters({
+  //     balance: 'getBalance'
+  //   })
+  // },
   methods: {
     fetchCustomerBalance() {
       let token = process.env.VUE_APP_AUTH_KEY;
@@ -56,7 +62,8 @@ export default {
     parseBalanceResponse(data) {
       for(let d in data) {
         if(data[d].currency === 'NGN') {
-          this.balance = this.formatNumber(data[d].balance, data[d].currency) 
+          this.balance = this.formatNumber(data[d].balance, data[d].currency)
+          this.$store.commit('setBalance', this.balance) 
           break;
         }
       }
@@ -64,7 +71,7 @@ export default {
   },
   mounted() {
     this.fetchCustomerBalance();
-  }
+  },
 }
 </script>
 <style lang="scss" scoped>

@@ -7,10 +7,12 @@ import axios from 'axios';
 
 import App from './App.vue';
 import router from './router';
+import store from './store';
 
 
 import 'element-ui/lib/theme-chalk/index.css';
 import '../node_modules/bulma/css/bulma.css';
+
 
 Vue.prototype.$ELEMENT = { size: 'small' };
 locale.use(lang);
@@ -21,6 +23,7 @@ Vue.use(Vue.prototype.$http = axios.create({ baseURL: 'https://api.paystack.co/'
 Vue.config.productionTip = false;
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 }).$mount('#app');
