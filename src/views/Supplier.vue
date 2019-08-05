@@ -1,52 +1,49 @@
 <template>
   <div class="supplier">
-    <Navbar />
-    <div class="is-main-content">
-      <div class="column top-actions">
-        <div class="is-pulled-right">
-          <a class="button is-info is-outlined" @click="displayNewSupplier">Add Supplier</a>
-          <!-- <a class="button is-info is-outlined">Bulk Upload Supplier</a> -->
-        </div>
+    <div class="column top-actions">
+      <div class="is-pulled-right">
+        <a class="button is-info is-outlined" @click="displayNewSupplier">Add Supplier</a>
+        <!-- <a class="button is-info is-outlined">Bulk Upload Supplier</a> -->
       </div>
-      <div class="column is-12">
-        <data-tables-server ref="multipleTable" :data="suppliers" :total="total" @query-change="fetchSuppliers" :pagination-props="pagination"
-          :table-props="tableProps"  :layout="layout" @selection-change="handleSelectionChange">
-          <el-table-column type="selection" width="55">
-          </el-table-column>
-          <el-table-column label="Name" sortable prop="name">
-            <template slot-scope="scope">
-              <span v-for="supplier in moreInfoListner(scope.row)" :key= "supplier.name" type="text" class="td_text"
-                @click="supplier.handler">
-                {{ scope.row.name }}
-              </span>
-            </template>
-          </el-table-column>
-          <el-table-column label="Bank" sortable prop="bank_name">
-            <template slot-scope="scope">
-              <span>{{ scope.row.bank_name }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="Account Number" >
-            <template slot-scope="scope">
-              <span>{{ scope.row.account_number }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column label="Active">
-            <template slot-scope="scope">
-              <span>{{ scope.row.active }}</span>
-            </template>
-          </el-table-column>
-          <el-table-column>
-            <template slot-scope="scope">
-              <button class="button is-info" v-for="supplier in paymentListener(scope.row)" :key= "supplier.recipient_code" @click="supplier.handler">Pay</button>
-            </template>
-          </el-table-column>
-        </data-tables-server>
-      </div>
-      <NewSupplier @close="closeNewSupplier" v-if="showNewForm" :showNewForm=showNewForm />
-      <PaymentForm @close="closePaymentForm" v-if="showPaymentForm" :supplier=supplier :showPaymentForm=showPaymentForm />
-      <SupplierDetail @close="closeSupplierDetails" v-if="showDetails" :supplier=supplier :showDetails=showDetails />
     </div>
+    <div class="column is-12">
+      <data-tables-server ref="multipleTable" :data="suppliers" :total="total" @query-change="fetchSuppliers" :pagination-props="pagination"
+        :table-props="tableProps"  :layout="layout" @selection-change="handleSelectionChange">
+        <el-table-column type="selection" width="55">
+        </el-table-column>
+        <el-table-column label="Name" sortable prop="name">
+          <template slot-scope="scope">
+            <span v-for="supplier in moreInfoListner(scope.row)" :key= "supplier.name" type="text" class="td_text"
+              @click="supplier.handler">
+              {{ scope.row.name }}
+            </span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Bank" sortable prop="bank_name">
+          <template slot-scope="scope">
+            <span>{{ scope.row.bank_name }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Account Number" >
+          <template slot-scope="scope">
+            <span>{{ scope.row.account_number }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column label="Active">
+          <template slot-scope="scope">
+            <span>{{ scope.row.active }}</span>
+          </template>
+        </el-table-column>
+        <el-table-column>
+          <template slot-scope="scope">
+            <button class="button is-info" v-for="supplier in paymentListener(scope.row)" :key= "supplier.recipient_code" @click="supplier.handler">Pay</button>
+          </template>
+        </el-table-column>
+      </data-tables-server>
+    </div>
+    <NewSupplier @close="closeNewSupplier" v-if="showNewForm" :showNewForm=showNewForm />
+    <PaymentForm @close="closePaymentForm" v-if="showPaymentForm" :supplier=supplier :showPaymentForm=showPaymentForm />
+    <SupplierDetail @close="closeSupplierDetails" v-if="showDetails" :supplier=supplier :showDetails=showDetails />
   </div>
 </template>
 
@@ -54,14 +51,12 @@
 
 import { toast } from "bulma-toast";
 
-import Navbar from '@/components/Navbar.vue';
 import NewSupplier from '@/components/NewSupplier.vue';
 import PaymentForm from '@/components/PaymentForm.vue';
 import SupplierDetail from '@/components/SupplierDetail.vue';
 
 export default {
   components: {
-    Navbar,
     NewSupplier,
     PaymentForm,
     SupplierDetail
@@ -187,20 +182,6 @@ export default {
 
   .supplier {
     
-    .is-main-content {
-      height: 100vh;
-      position: relative;
-      top: 4rem;
-      background-color: $light-grey;
-    }
-    // table {
-    //   border-radius: 4px; 
-    //   border: solid 1px #00ff00; 
-    //   background-color: #ffffff;
-    // }
-    // thead {
-    //   background-color: #f4f7fb;
-    // }
     .sc-table {
       margin-top: 2rem;
       .pagination-wrap {

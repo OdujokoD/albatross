@@ -1,31 +1,72 @@
 <template>
   <div id="app">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-      <router-link to="/login">Login</router-link>
-    </div> -->
-    <router-view/>
+    <div class="columns">
+      <div class="column is-2">
+        <div class="sidebar">
+          <aside class="menu">
+            <p class="menu-label">General</p>
+            <ul class="menu-list">
+              <li>
+                <router-link to="/">Suppliers</router-link>
+              </li>
+              <li>
+                <router-link to="/transaction">Transactions</router-link>
+              </li>
+              <li>
+                <router-link to="/profile">Profile</router-link>
+              </li>
+            </ul>
+          </aside>
+        </div>
+      </div>
+      <div class="column content">
+        <Navbar />
+        <div class="is-main-content">
+          <router-view />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
-
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+<script>
+import Navbar from '@/components/Navbar.vue';
+export default {
+  components: {
+    Navbar
+  }
 }
-#nav {
-  padding: 30px;
+</script>
+<style lang="scss" scope>
+// variabls
+$dark-blue: #021f35;
+$light-grey: #f2f2f3;
+
+.sidebar {
+  background-color: $dark-blue;
+  height: 100vh;
+  width: 16.667%;
+  color: white;
+  position: fixed;
+  // top: 0;
+  // left: 0;
+
+  .menu {
+    margin-top: 55px;
+  }
+
+  .menu-list a {
+    border-radius: 0 !important;
+  }
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
+.content {
+  padding-left: 0.5rem !important;
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+  .is-main-content {
+      height: 100vh;
+      position: relative;
+      top: 4rem;
+      background-color: $light-grey;
+    }
 }
 </style>
