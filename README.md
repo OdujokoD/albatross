@@ -5,6 +5,11 @@
 npm install
 ```
 
+## Add Key
+```
+Open the .env file and add your Paystack API key
+```
+
 ### Compiles and hot-reloads for development
 ```
 npm run serve
