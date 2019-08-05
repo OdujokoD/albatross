@@ -5,7 +5,7 @@
       <div class="column top-actions">
         <div class="is-pulled-right">
           <a class="button is-info is-outlined" @click="displayNewSupplier">Add Supplier</a>
-          <a class="button is-info is-outlined">Bulk Upload Supplier</a>
+          <!-- <a class="button is-info is-outlined">Bulk Upload Supplier</a> -->
         </div>
       </div>
       <div class="column is-12">
@@ -15,7 +15,7 @@
           </el-table-column>
           <el-table-column label="Name" sortable prop="name">
             <template slot-scope="scope">
-              <span v-for="supplier in tableListner(scope.row)" :key= "supplier.name" type="text" class="td_text"
+              <span v-for="supplier in moreInfoListner(scope.row)" :key= "supplier.name" type="text" class="td_text"
                 @click="supplier.handler">
                 {{ scope.row.name }}
               </span>
@@ -31,14 +31,20 @@
               <span>{{ scope.row.account_number }}</span>
             </template>
           </el-table-column>
-          <el-table-column label="Status">
+          <el-table-column label="Active">
             <template slot-scope="scope">
               <span>{{ scope.row.active }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column>
+            <template slot-scope="scope">
+              <button class="button is-info" v-for="supplier in paymentListener(scope.row)" :key= "supplier.recipient_code" @click="supplier.handler">Pay</button>
             </template>
           </el-table-column>
         </data-tables-server>
       </div>
       <NewSupplier @close="closeNewSupplier" v-if="showNewForm" :showNewForm=showNewForm />
+      <PaymentForm @close="closePaymentForm" v-if="showPaymentForm" :supplier=supplier :showPaymentForm=showPaymentForm />
       <SupplierDetail @close="closeSupplierDetails" v-if="showDetails" :supplier=supplier :showDetails=showDetails />
     </div>
   </div>
@@ -50,12 +56,14 @@ import { toast } from "bulma-toast";
 
 import Navbar from '@/components/Navbar.vue';
 import NewSupplier from '@/components/NewSupplier.vue';
+import PaymentForm from '@/components/PaymentForm.vue';
 import SupplierDetail from '@/components/SupplierDetail.vue';
 
 export default {
   components: {
     Navbar,
     NewSupplier,
+    PaymentForm,
     SupplierDetail
   },
   data() {
@@ -66,6 +74,7 @@ export default {
       selectionMessage: "",
       showDetails: false,
       showNewForm: false,
+      showPaymentForm: false,
       supplier: {},
       suppliers: [],
       tableProps: {
@@ -84,6 +93,9 @@ export default {
       this.showNewForm = false
       this.fetchSuppliers();
     },
+    closePaymentForm() {
+      this.showPaymentForm = false
+    },
     closeSupplierDetails() {
       this.showDetails = false
     },
@@ -97,20 +109,6 @@ export default {
         dismissible: true,
         duration: 3000,
         pauseOnHover: true
-      });
-    },
-    fetchCustomer() {
-      let token = process.env.VUE_APP_AUTH_KEY;
-      let config = {
-          headers: {'Authorization': "bearer " + token}
-      };
-      let customerEmail = "cocoa@radiant.com";
-      this.$http.get('/customer/' + customerEmail , config)
-      .then((response) => {
-        console.log("Customer response: ", response)
-      })
-      .catch((error) => {
-        console.log(error)
       });
     },
     fetchSuppliers(query) {
@@ -146,12 +144,7 @@ export default {
       this.selectionMessage = (val.length == 1) ? "1 Selected" : val.length + " Selected"
       this.selectedRow = val
     },
-    parseSupplierResponse(suppliers) {
-      for(let index in suppliers) {
-        this.suppliers.push(this.flattenObject(suppliers[index]))
-      }
-    },
-    tableListner(row) {
+    moreInfoListner(row) {
       if (row.name !== null) {
         return [{
           handler: _ => {
@@ -161,10 +154,25 @@ export default {
         }]
       }
     },
-
+    parseSupplierResponse(suppliers) {
+      this.suppliers = []
+      for(let index in suppliers) {
+        this.suppliers.push(this.flattenObject(suppliers[index]))
+      }
+    },
+    paymentListener(row) {
+      if (row.name !== null) {
+        return [{
+          handler: _ => {
+            this.showPaymentForm = true;
+            this.supplier = row;
+          },
+        }]
+      }
+    }
   },
   mounted() {
-    this.fetchCustomer();
+    // this.fetchCustomerBalance();
   }
 }
 </script>

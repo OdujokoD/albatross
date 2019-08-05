@@ -3,7 +3,7 @@
     <nav class="navbar" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <a class="navbar-item" href="https://bulma.io">
-          <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" />
+          Albatross
         </a>
         <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="overflow">
           <span aria-hidden="true"></span>
@@ -14,22 +14,8 @@
       <div id="overflow" class="navbar-menu">
         <div class="navbar-end">
           <div class="navbar-item">
-            <div class="buttons">
-              <a class="button is-primary">
-                <strong>Sign up</strong>
-              </a>
-              <a class="button is-light">Log in</a>
-              <div class="navbar-item has-dropdown is-hoverable">
-                <a class="navbar-link">More</a>
-                <div class="navbar-dropdown">
-                  <a class="navbar-item">About</a>
-                  <a class="navbar-item">Jobs</a>
-                  <a class="navbar-item">Contact</a>
-                  <hr class="navbar-divider" />
-                  <a class="navbar-item">Report an issue</a>
-                </div>
-              </div>
-            </div>
+            <span>Current Balance: </span>
+            <span>{{balance}}</span>
           </div>
         </div>
       </div>
@@ -38,7 +24,47 @@
 </template>
 <script>
 export default {
-  
+  data() {
+    return {
+      balance: 0,
+    }
+  },
+  methods: {
+    fetchCustomerBalance() {
+      let token = process.env.VUE_APP_AUTH_KEY;
+      let config = {
+          headers: {'Authorization': "bearer " + token}
+      };
+      this.$http.get('/balance' , config)
+      .then((response) => {
+        this.parseBalanceResponse(response.data.data)
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+    },
+    formatNumber(amount, currency="NGN") {
+      amount /= 100;
+      let result = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: currency,
+        minimumFractionDigits: 2
+      }).format(amount);
+
+      return result
+    },
+    parseBalanceResponse(data) {
+      for(let d in data) {
+        if(data[d].currency === 'NGN') {
+          this.balance = this.formatNumber(data[d].balance, data[d].currency) 
+          break;
+        }
+      }
+    }
+  },
+  mounted() {
+    this.fetchCustomerBalance();
+  }
 }
 </script>
 <style lang="scss" scoped>
