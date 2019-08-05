@@ -51,8 +51,6 @@ export default {
   },
   methods: {
     closeModal(event) {
-      // event.preventDefault()
-      // this.showDetails=false
       this.$emit("close");
     },
 

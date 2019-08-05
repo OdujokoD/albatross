@@ -4,12 +4,12 @@
     <div class="is-main-content">
       <div class="column top-actions">
         <div class="is-pulled-right">
-          <a class="button is-info is-outlined">Add Supplier</a>
+          <a class="button is-info is-outlined" @click="displayNewSupplier">Add Supplier</a>
           <a class="button is-info is-outlined">Bulk Upload Supplier</a>
         </div>
       </div>
       <div class="column is-12">
-        <data-tables-server ref="multipleTable" :data="suppliers" :total="total" @query-change="fetchData" :pagination-props="pagination"
+        <data-tables-server ref="multipleTable" :data="suppliers" :total="total" @query-change="fetchSuppliers" :pagination-props="pagination"
           :table-props="tableProps"  :layout="layout" @selection-change="handleSelectionChange">
           <el-table-column type="selection" width="55">
           </el-table-column>
@@ -38,18 +38,24 @@
           </el-table-column>
         </data-tables-server>
       </div>
+      <NewSupplier @close="closeNewSupplier" v-if="showNewForm" :showNewForm=showNewForm />
       <SupplierDetail @close="closeSupplierDetails" v-if="showDetails" :supplier=supplier :showDetails=showDetails />
     </div>
   </div>
 </template>
 
 <script>
+
+import { toast } from "bulma-toast";
+
 import Navbar from '@/components/Navbar.vue';
+import NewSupplier from '@/components/NewSupplier.vue';
 import SupplierDetail from '@/components/SupplierDetail.vue';
 
 export default {
   components: {
     Navbar,
+    NewSupplier,
     SupplierDetail
   },
   data() {
@@ -59,6 +65,7 @@ export default {
       selectedRow: [],
       selectionMessage: "",
       showDetails: false,
+      showNewForm: false,
       supplier: {},
       suppliers: [],
       tableProps: {
@@ -73,8 +80,24 @@ export default {
     }
   },
   methods: {
+    closeNewSupplier() {
+      this.showNewForm = false
+      this.fetchSuppliers();
+    },
     closeSupplierDetails() {
       this.showDetails = false
+    },
+    displayNewSupplier() {
+      this.showNewForm = true
+    },
+    displayToast(msg, type) {
+      toast({
+        message: msg,
+        type: type,
+        dismissible: true,
+        duration: 3000,
+        pauseOnHover: true
+      });
     },
     fetchCustomer() {
       let token = process.env.VUE_APP_AUTH_KEY;
@@ -90,20 +113,20 @@ export default {
         console.log(error)
       });
     },
-    fetchData(query) {
+    fetchSuppliers(query) {
       let token = process.env.VUE_APP_AUTH_KEY;
       let config = {
           headers: {'Authorization': "bearer " + token}
       };
       this.$http.get('/transferrecipient', config, {
-        params: {page: query.page, pageSize: query.pageSize}
+        params: {page: query.page, perPage: query.pageSize}
       })
       .then((response) => {
         this.parseSupplierResponse(response.data.data)
         this.total = response.data.meta.total
       })
       .catch((error) => {
-        console.log(error)
+        this.displayToast(error.response.data.message, "is-danger")
       });
     },
     flattenObject(obj) {
@@ -126,7 +149,6 @@ export default {
     parseSupplierResponse(suppliers) {
       for(let index in suppliers) {
         this.suppliers.push(this.flattenObject(suppliers[index]))
-        // console.log("Res: ", res)
       }
     },
     tableListner(row) {
@@ -135,10 +157,6 @@ export default {
           handler: _ => {
             this.showDetails = true;
             this.supplier = row;
-            // this.row_index= this.employee_data.indexOf(row)
-            // this.$store.commit('change_index', this.row_index)
-            // this.row_data= this.clicked_employee;
-            // this.display_show_modal = true
           },
         }]
       }
