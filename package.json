@@ -15,7 +15,7 @@
     "bulma-toast": "^1.5.1",
     "core-js": "^2.6.5",
     "element-ui": "^2.11.1",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "vue": "^2.6.10",
     "vue-data-tables": "^3.4.4",
     "vue-router": "^3.0.3",
